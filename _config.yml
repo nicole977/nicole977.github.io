@@ -186,17 +186,17 @@ sidebar:
     href: /atom.xml
     class: 'fas fa-rss fa-fw'
   - title: yunque7@foxmail.com # email
-    href: mailto:yunque7@foxmail.com
+    href: mailto:yunque7@163.com
     class: 'fas fa-envelope fa-fw'
-  - title: WuK # codeforces
-    href: //codeforces.com/profile/WuK
-    class: 'fas fa-chart-bar fw'
-  - title: WuK # vjudge
-    href: //vjudge.net/user/WuK
+  - title: 糖分控 # 博客园
+    href: //www.cnblogs.com/chenyuan7/
+    class: 'fas fa-forumbee fw'
+  - title: WuK1 # vjudge
+    href: //vjudge.net/user/WuK1
     class: 'fas fa-smile fa-fw'
   - title: 670444951 # qq
     class: 'fab fa-qq fa-fw'
-  - title: Chen670444951 # weixin
+  - title: weixin # weixin
     class: 'fab fa-weixin fa-fw'
   - title: github
     href: //github.com/nicole977
@@ -243,7 +243,7 @@ sidebar:
   run_time:
     enable: true
     src: /public/js/run_time.js
-    start_time: '10/04/2017 11:03:56' # 这是我第一篇CSDN博客的时间
+    start_time: '11/25/2017 16:38:07' # 这是我第一篇博客园博客的时间
     alert: <i class="fas fa-cog fa-spin fa-fw"></i>
     day: 天
     hour: 时
@@ -256,8 +256,8 @@ sidebar:
 index:
   showtag:
   - 人生经验
-  - ICPC模板
-  - 水野爱
+  - 正经博文
+  - 云雀恭弥
 
 post:
   meta:
@@ -279,13 +279,13 @@ post:
     text: 如果这篇博客帮助到你，可以请我喝一杯咖啡~
     img: # 万一真的有人打赏呢~
     - id: wechat
-      src: //cdn.jsdelivr.net/gh/wu-kan/wu-kan.github.io@1788f1b6c2e12cca626b85f25749f99ca0c7aad0/public/image/wechatpay.jpg
+      src: //cdn.jsdelivr.net/gh/nicole977/nicole977.github.io@1788f1b6c2e12cca626b85f25749f99ca0c7aad0/public/image/wechatpay.jpg
     - id: wechatappreciate
-      src: //cdn.jsdelivr.net/gh/wu-kan/wu-kan.github.io@1788f1b6c2e12cca626b85f25749f99ca0c7aad0/public/image/wechatappreciate.jpg
+      src: //cdn.jsdelivr.net/gh/nicole977/nicole977.github.io@1788f1b6c2e12cca626b85f25749f99ca0c7aad0/public/image/wechatappreciate.jpg
     - id: qq
-      src: //cdn.jsdelivr.net/gh/wu-kan/wu-kan.github.io@1788f1b6c2e12cca626b85f25749f99ca0c7aad0/public/image/qqpay.jpg
+      src: //cdn.jsdelivr.net/gh/nicole977/nicole977.github.io@1788f1b6c2e12cca626b85f25749f99ca0c7aad0/public/image/qqpay.jpg
     - id: alipay
-      src: //cdn.jsdelivr.net/gh/wu-kan/wu-kan.github.io@1788f1b6c2e12cca626b85f25749f99ca0c7aad0/public/image/alipay.jpg
+      src: //cdn.jsdelivr.net/gh/nicole977/nicole977.github.io@1788f1b6c2e12cca626b85f25749f99ca0c7aad0/public/image/alipay.jpg
 
 valine:
   enable: true
