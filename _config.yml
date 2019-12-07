@@ -190,10 +190,7 @@ sidebar:
     class: 'fas fa-envelope fa-fw'
   - title: 糖分控 # 博客园
     href: //www.cnblogs.com/chenyuan7/
-    class: 'fas fa-forumbee fa-fw'
-  - title: WuK1 # vjudge
-    href: //vjudge.net/user/WuK1
-    class: 'fas fa-smile fa-fw'
+    class: 'fab fa-forumbee fa-fw'
   - title: 670444951 # qq
     class: 'fab fa-qq fa-fw'
   - title: weixin # weixin
