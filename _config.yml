@@ -180,7 +180,7 @@ sidebar:
     enable: true
     img: //chenchen7.oss-cn-shanghai.aliyuncs.com/20191206005422.jpg # 头像的地址
     info: <br/>17级在读<br/>计科专业<br/>永远喜欢云雀恭弥<br/>海贼王 银魂<br/>爵士舞 # 头像背后的信息
-  description: '<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=100% height=52 src="//music.163.com/outchain/player?type=0&id=155059595&auto=0&height=32"></iframe>'
+  description: '<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=100% height=52 src="//music.163.com/outchain/player?type=0&id=3108847554&auto=0&height=32"></iframe>'
   social:
   - title: rss
     href: /atom.xml
