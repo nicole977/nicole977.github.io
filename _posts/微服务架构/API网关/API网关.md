@@ -1,0 +1,111 @@
+### API网关
+
+API网关是一个服务器，是系统的唯一入口。API网关封装了系统内部架构，并提供API给各个客户端。它还可以有其他功能，如身份验证、监控、负载均衡、缓存、请求分片与管理、静态响应处理等。API网关有很多种实现方法，如Zuul,Nginx,Node.js等
+
+API网关方式的核心要点是，所有的客户端和消费端都通过统一的网关接入微服务，在网关层处理所有的非业务功能。通常，网关也是提供REST/HTTP的访问API。服务端通过API-GW注册和管理服务。（来自百度百科）
+
+eureka：实现注册中心以及服务的注册与发现
+ribbon：实现服务间的负载均衡
+hystrix：实现线程的隔离和断路器功能
+
+PC端/移动端通过负载均衡器，通过里面它所支持的API网关调用各个服务的过程
+
+---
+
+Zuul是Spring Cloud全家桶中的微服务API网关，是基于JVM的路由器和服务器端负载均衡器
+
+启动注册中心(8761)，服务提供者工程(7900)和网关服务工程(8084)
+
+创建microservice-gateway-zuul子工程，在pom.xml添加eureka和zuul的依赖
+
+pom.xml
+```
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-zuul</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-eureka</artifactId>
+    </dependency>
+</dependencies>
+```
+
+编写配置文件application.yml，编写eureka的端口号,服务地址和API网关服务的路由配置
+```
+server:
+  port: 8084
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+spring:
+  application:
+    name: microservice-gateway-zuul
+
+zuul:
+  routes:     # 路由
+    order-serviceId:  # zuul的唯一标识，可以任意设置名称，但必须唯一，如果该值与service-id的名称相同时，service-id的值可忽略
+      path: /order-zuul/**   # 需要映射的路径
+      service-id: microservice-eureka-server  # Eureka中的serviceId
+```
+
+@EnableZuulProxy注解：开启zuul的api的网关功能
+
+Application.java
+```
+package com.itheima.springcloud;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
+
+@EnableEurekaClient
+@EnableZuulProxy    //开启zuul的api的网关功能
+@SpringBootApplication
+public class Application {
+    public static void main(String[] args){
+        SpringApplication.run(Application.class,args);
+    }
+}
+```
+
+分别启动这三个工程后，注册中心已注册的服务有：
+
+![](http://chenchen7.oss-cn-shanghai.aliyuncs.com/20190720225812.PNG)
+
+地址栏上输入`http://localhost:7900/order/1`单独访问订单服务,浏览器显示：
+
+![](http://chenchen7.oss-cn-shanghai.aliyuncs.com/20190720225827.PNG)
+
+通过zuul验证路由功能，通过网关服务来访问订单信息，地址栏上输入`http://localhost:8084/microservice-eureka-server/order/1`,浏览器显示：
+
+![](http://chenchen7.oss-cn-shanghai.aliyuncs.com/20190720225837.PNG)
+
+![](http://chenchen7.oss-cn-shanghai.aliyuncs.com/20190720225853.PNG)
+
+如你所见，这是一个失败了的案例，本应该显示出所要访问的订单信息的，原因我还在找(￣_￣|||)，找到了再更
+
+上面的是将zuul和Eureka整合一起使用，zuul还可不依赖Eureka而单独使用
+
+复制microservice-gateway-zuul子工程，重命名为microservice-gateway-zuul2，将相关的Eureka删掉，将配置文件application.yml中zuul的内容修改为传统路由的形式：
+```
+server:
+  port: 8085
+spring:
+  application:
+    name: microservice-gateway-zuul2
+zuul:
+  routes:
+    order-url:
+      path: /order-zuul2/**   # 设置需要映射的路径
+      url: http://localhost:7900/   # path路由到的地址
+```
+
+启动工程，访问``,此时同样可以显示出订单信息，成功~
+
+![](http://chenchen7.oss-cn-shanghai.aliyuncs.com/20190720225952.PNG)

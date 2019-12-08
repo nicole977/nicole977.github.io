@@ -1,0 +1,229 @@
+### 数据绑定
+
+概念：将请求消息数据与后台方法参数建立连接的过程
+
+流程：
+
+![](https://dbnewyouth.oss-cn-zhangjiakou.aliyuncs.com/images/1556443205490.PNG?Expires=1871803042&OSSAccessKeyId=LTAI91SeAmgnTkb9&Signature=WjNVX9Dnry%2FaFAuBp12TlfnenaI%3D)
+
+分类：根据客户端请求参数类型和个数的不同，主要分为简单数据绑定和复杂数据绑定
+
+常用的默认参数类型：
+
+HttpServletRequest:通过request对象获取请求信息
+
+HttpServletResponse:通过response处理响应信息
+
+HttpSession:通过session对象得到session中存放的对象
+
+Model/ModelMap:Model是一个接口，ModelMap是一个接口实现，作用是将model数据填充到
+
+request域
+
+数据绑定
+```
+@Controller
+      public class UserController {
+              @RequestMapping("/selectUser")
+               public String selectUser(HttpServletRequest request) {
+	      String id = request.getParameter("id");	
+	      System.out.println("id="+id);
+	      return "success";
+	}
+     }
+```
+在地址栏上输入id=1，会跳转到success.jsp页面，后台会输出"id=1"，这就完成绑定
+
+#### 简单数据类型的绑定
+
+就是指Java中几种基本数据类型的绑定，例如int、String、Double等类型
+```
+@RequestMapping("/selectUser")
+public String selectUser(Integer id) {
+    System.out.println("id="+id);
+    return "success";
+}
+```
+
+有时候前端请求中`参数名和后台控制器类方法中的形参名不一样`，这就会导致后台无法正确绑定并接收到前端请求的参数。
+
+可用`@RequestParam注解`
+
+![](https://dbnewyouth.oss-cn-zhangjiakou.aliyuncs.com/images/1556443811215.PNG?Expires=1871803103&OSSAccessKeyId=LTAI91SeAmgnTkb9&Signature=7tbRPiSvwmhJEZfPILZUZz33GYs%3D)
+
+```
+@RequestMapping("/selectUser")
+	public String selectUser(@RequestParam(value="user_id",required="true",defaultValue="1")Integer id) {
+	    System.out.println("id="+id);
+	    return "success";
+	}
+```
+
+此时在地址栏上输入user_id=1，也会跳转到success.jsp页面，后台会输出"id=1"
+required="true":表示必须指定参数
+defaultValue="1":表示若不传参数默认值是1
+
+##### 1）.绑定POJO类型：
+
+将所有关联的请求参数封装在一个POJO中，然后在方法中直接使用该POJO作为形参来完成数据绑定
+在实际应用中，客户端请求可能会传递`多个不同类型的参数`数据,针对多类型、多参数的请求，可以使用`POJO类型进行数据绑定`
+
+演示POJO类型数据的绑定的使用
+
+1.创建POJO用户类，来封装用户注册信息
+
+2.在控制器编写注册方法
+
+3.创建用户界面
+
+注：在使用POJO类型数据绑定时，前端请求的参数名（例如form表单内各元素的name属性值）必须与要绑定的POJO类中的属性名一样
+
+4.启动项目
+
+途中可能会出现中文乱码问题，要在web.xml配置spring提供的编码过滤器
+```
+<filter>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+                   <param-name>encoding</param-name>
+                   <param-value>UTF-8</param-value>
+        </init-param>
+</filter>
+<filter-mapping>
+       <filter-name>CharacterEncodingFilter</filter-name>
+       <url-pattern>/*</url-pattern>	//拦截所有URL请求，交由编码过滤器
+</filter-mapping>
+```
+
+##### 2）.绑定包装POJO：在一个POJO中包含另一个简单的POJO
+
+栗子：
+```
+//用户类
+public class User {
+	private Integer id;
+	private String username;
+	private String password;
+	//getter和setter
+}
+
+//订单类
+public class Orders {
+	private Integer ordersId;
+	private User user;
+	//getter和setter
+}
+
+//控制器
+@Controller
+public class OrdersController{
+	//向订单查询页面跳转
+	@RequestMapping("/tofindOrdersWithUser")
+	public String tofindOrdersWithUser() {
+		return "orders";
+	}
+
+	//查询订单和用户信息
+	@RequestMapping("/findOrdersWithUser")
+	public String findOrdersWithUser(Orders orders) {
+		Integer ordersId=orders.getOrdersId();
+		User user=orders.getUser();
+		String username=user.getUsername();
+		System.out.println("ordersId:"+ordersId);
+		System.out.println("username:"+username);
+		return "success";
+	}
+}
+
+(注：
+	${pageContext.request.contextPath}是JSP取得绝对路径的方法，等价于<%=request.getContextPath()%> 。也就是取出部署的应用程序名或者是当前的项目名称
+)
+
+orders.jsp
+<form action="${pageContext.request.contextPath}/findOrdersWithUser" method="post">
+	订单编号：<input type="text" name="ordersId"/><br>
+	所属用户：<input type="text" name="user.username"/><br>
+	<input type="submit" value="查询"/>
+</form>
+
+success.jsp
+<body>
+	成功页面
+</body>
+
+springmvc-config.xml
+<!-- 定义组件扫描器，指定需要扫描的包 -->
+	<context:component-scan base-package="com.nm.controller" />	
+	<!-- 定义视图解析器 -->
+	<bean id="viewResolver" class=
+    "org.springframework.web.servlet.view.InternalResourceViewResolver">
+	     <!-- 设置前缀 -->
+	     <property name="prefix" value="/WEB-INF/jsp/" />
+	     <!-- 设置后缀 -->
+	     <property name="suffix" value=".jsp" />
+	</bean>
+
+web.xml
+<!-- 配置前端控制器DispatcherServlet -->
+<servlet>
+    <servlet-name>springmvc</servlet-name>
+    <servlet-class>
+              org.springframework.web.servlet.DispatcherServlet
+         </servlet-class>
+    <init-param>
+    <!-- 初始化时加载配置文件，默认查找/WEB-INF/${servlet-name}-servlet.xml -->
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:springmvc-config.xml</param-value>
+    </init-param>
+    <!-- 配置服务器启动后立即加载spring mvc配置文件 -->
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>springmvc</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+  <!-- 编码过滤器 -->
+  <filter>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <filter-class>
+  		org.springframework.web.filter.CharacterEncodingFilter
+  	</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+```
+
+在地址栏上输入"`http://localhost:8080/MVCTest/tofindOrdersWithUser`"，会跳转到orders.jsp页面，在orders.jsp页面上输入id和name点查询按钮会跳转到success.jsp
+
+未完
+
+##### 3）.自定义数据绑定
+
+有些`特殊类型的参数是无法在后台进行直接转换`的，但也有些特殊类型`无法直接进行数据绑定`，必须先经过数据转换，例如`日期数据`,此时就需要`自定义转换器(Converter)`或`格式化(Formatter)`来进行数据绑定
+
+自定义数据绑定 报错
+
+#### 复杂数据绑定
+
+##### 1）.绑定数组
+
+栗子：报500
+
+当前端传递过来的数据批量包含各种类型时，使用集合数据绑定
+
+##### 2）.绑定集合
+
+在包装类中定义一个包含用户信息类的集合
+
+
+栗子：

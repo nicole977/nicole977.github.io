@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: microservice-config-server
+  profiles:
+    active: native    #使用本地文件系统的存储方式来保存配置信息
+server:
+  port: 8762

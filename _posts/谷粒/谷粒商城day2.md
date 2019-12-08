@@ -1,0 +1,33 @@
+#### 记：
+
+上传图片信息处理（fastdfs搞不定，先改用oss）
+
+提交格式：enctype
+
+混合式的媒体格式：multipart
+
+```
+<form method="post" enctype="multipart/Form-data">
+    <input type="file"/>
+</form>
+
+```
+
+控制器
+```
+@RequestMapping("fileUpload")
+@ResponseBody
+public String fileUpload(@RequestParam("file") MultipartFile multipartFile){
+    return "success";
+}
+```
+
+解决高并发的方式：集群；缓存服务器；限流（限制访问网站的上限）
+
+
+
+
+
+
+
+

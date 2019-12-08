@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: microservice-config-client
+  cloud:
+    config:
+      profile: prod
+      url: http://localhost:8762/
+server:
+  port: 8763

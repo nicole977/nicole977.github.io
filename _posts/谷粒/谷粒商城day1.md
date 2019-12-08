@@ -1,0 +1,155 @@
+#### 谷粒商城使用springboot和SSM框架。dubbo和zookeeper，fastdfs分布式文件存储
+
+service：提供者；web：消费者
+
+#### 坑一：
+
+@MapperScan注解和mybatis.mapper-locations 两者缺一不可
+
+* @MapperScan(basePackages="com.ostrich.*.repository")这个注解是用户扫描mapper接口的也就是dao类
+
+* `mybatis.mapper-locations=classpath:mapper/*Mapper.xml`：mybatis.mapper-locations，而这个是用于扫描mapper.xml的，二者缺少一个都会报错
+
+#### 坑二：
+
+报service层空值没注入的原因：service层的mapper没有加@Autowired，没有自动注入
+
+为什么要在管理项目中所有的接口和bean中引入通用mapper
+
+bean是数据库映射类，数据库映射类里引入了封装mybatis的通用mapper，所以跟着映射类走，bean到哪通用mapper就到哪，所以在工程中引入
+
+dubbo传输速度比spring cloud传输速度快原因：spring cloud通信时使用http协议，rest风格；dubbo使用的是自定义的协议
+
+#### 坑三：
+
+spring boot dubbo的service项目报错`NoClassDefFoundError: org/apache/curator/framework/CuratorFrameworkFactory`
+
+原因：缺少curator框架依赖
+```
+<!-- https://mvnrepository.com/artifact/org.apache.curator/curator-framework -->
+<dependency>
+    <groupId>org.apache.curator</groupId>
+    <artifactId>curator-framework</artifactId>
+    <version>2.12.0</version>
+</dependency>
+```
+
+#### 坑四：
+
+`java.lang.IllegalStateException: Failed to register dubbo://`,`KeeperErrorCode = Unimplemented for /service`错误
+
+使用Curator时报错，原因是因为版本问题
+
+zookeeper版本对照cuartor版本
+
+看Curator官网的声明：
+
+地址：http://curator.apache.org/
+
+```
+The are currently two released versions of Curator, 2.x.x and 3.x.x:
+
+Curator 2.x.x - compatible with both ZooKeeper 3.4.x and ZooKeeper 3.5.x
+Curator 3.x.x - compatible only with ZooKeeper 3.5.x and includes support for new features such as dynamic reconfiguration, etc.
+```
+
+版本不匹配的问题，我这里是使用的curator版本过高，使用2.xx就没有问题了。
+
+#### 坑五：
+
+dubbo报错`InstanceNotFoundException: org.springframework.boot:type=Admin,name=SpringApplication`
+<img src="http://chenchen7.oss-cn-shanghai.aliyuncs.com/20191029075513.PNG" style="width:900px">
+将日志级别logging.level.root的值debug改为info，看到别的报错信息
+<img src="http://chenchen7.oss-cn-shanghai.aliyuncs.com/20191029075505.PNG" style="width:900px">
+发现是版本问题
+
+```
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>dubbo</artifactId>
+    <version>2.6.5</version>
+</dependency>
+```
+
+将2.6.5改成2.6.4，该错误消失，再次运行，dubbo报错`Connection timed out: no further information`，连接超时
+<img src="http://chenchen7.oss-cn-shanghai.aliyuncs.com/20191029075459.PNG" style="width:900px">
+首先关闭防火墙，其次
+
+```
+# zookeeper注册中心的地址,默认端口：2181
+spring.dubbo.registry.address=172.200.194.22:2181
+```
+
+将172.200.194.22修改为172.0.0.1（其实172.200.194.22是本地IP地址，按道理来说应该都能用的丫，不明白）
+
+重启tomcat，zookeeper，项目
+
+#### 坑六：
+
+将gmall-manage-service，gmall-manage-web，gmall-user-service，gmall-user-web项目和前端项目gmall-admin都运行起来，报错`Failed to load http://127.0.0.1:8082/getCatalog1: No 'Access-Control-Allow-Origin' header is present on the requested resource. Origin 'http://127.0.0.1:8888' is therefore not allowed access. The response had HTTP status code 500.`
+
+跨域的问题，跨域：端口号不同，IP地址不同，前端服务器端口号为8888，后端服务器端口号为8080，两个服务器要彼此信任才能传数据，所以要在控制层加上@CrossOrigin，又报错`message can not send, because channel is closed`,发现是防火墙没有关掉，防火墙可能将外部链接请求给屏蔽掉了，关了就好了
+
+#### 记：
+
+后台接收前台传来的json数据：@RequestBody
+
+例：
+
+```
+public String saveAttrInfo(@RequestBody PmsBaseAttrInfo pmsBaseAttrInfo){
+
+}
+```
+
+get请求地址栏传参：直接接收
+
+例：
+
+```
+public List<PmsBaseCatalog3> getCatalog3(String catalog2Id){
+    return catalogService.getCatalog3(catalog2Id);
+}
+```
+
+insert()方法与insertSelective()方法的区别：
+
+insert：空值和非空值都能插入数据库
+
+insertSelective：非空值才能插入数据库
+
+创建Example对象
+
+`Example example=new Example(PmsBaseAttrInfo.class);`
+
+正则：修改条件表达式，根据id修改：
+
+`example.createCriteria().andEqualTo("id",pmsBaseAttrInfo.getId());`
+
+第一个参数：目标数据
+
+第二个参数：原始数据
+
+`pmsBaseAttrInfoMapper.updateByExampleSelective(null,null);`
+
+修改功能：查询+保存
+
+sku和spu的区别
+
+SPU(Standard Product Unit) 标准产品单位，是一个商品集合, 该集合描述了一个产品的特性, 通俗的讲, 属性值特性相同的商品可以称为一个SPU
+
+SKU(Stock Keeping Unit) 库存量单位， SKU即库存进出计量单位，可以是以件，盒，托盘等为单位， SKU是物理上不可分割的最小存货单元, 尤其在服装，鞋类商品中使用最为普遍
+
+#### 总结一下：
+
+SPU是商品编码, SKU是商品下的一个分类属性(商品下一个颜色或者尺码)
+
+最形象的例子:
+
+SPU就是一个苹果6
+
+SKU就是银色苹果6，灰色苹果6，土豪金苹果6
+
+#### 坑七：
+
+`No provider available from registry 127.0.0.1:2181 for service com.atguigu.gmall.service.SpuService on consumer 172.200.193.121 use dubbo version 2.6.4, please check status of providers(disabled, not registered or in blacklist).`显示未注册，没启动dubbo，或者看下是不是impl没有添加注解 dubbo的@Service 注解，如没以上问题，全部关掉重新启动

@@ -1,0 +1,14 @@
+server:
+    port: 8761  # 服务注册中心的端口，端口任意
+eureka:
+    instance:   # 管理实例
+        hostname: localhost
+    client:
+# 由于本项目是一个注册中心，是不需要向自己注册和检索服务的，所以register-with-eureka和fetch-registry都设置为false
+        register-with-eureka: false
+        fetch-registry: false
+        service-url:
+            defaultZone: http://${eureka.instance.hostname}:${server.post}/eureka/      # 注册中心的地址
+        server:
+            enable-self-preservation: false
+
