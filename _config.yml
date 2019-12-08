@@ -73,7 +73,7 @@ head: # 删改前确定知道自己在做什么
   - key: rel
     value: 'shortcut icon'
   - key: href
-    value: //gravatar.loli.net/avatar/a12c5fff23dde00df79af9aca4e7b6e4?d=wavatar&s=32
+    value: //chenchen7.oss-cn-shanghai.aliyuncs.com/20191206005422.jpg
 - tag: link # 下面是博客的css，有些插件的css是单独在插件里引用的，假如需要自己的css可以仿照去加在后面。无脑cdn加速了。
   var:
   - key: rel
