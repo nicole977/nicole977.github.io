@@ -240,7 +240,7 @@ sidebar:
   run_time:
     enable: true
     src: /public/js/run_time.js
-    start_time: '11/25/2017 16:38:07' # 这是我第一篇博客园博客的时间
+    start_time: '11/25/2019 16:38:07' # 这是搭建个人博客网站时间
     alert: <i class="fas fa-cog fa-spin fa-fw"></i>
     day: 天
     hour: 时
