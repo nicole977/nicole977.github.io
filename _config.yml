@@ -204,7 +204,7 @@ sidebar:
   nav:
   - title: '<i class="fas fa-home fa-fw"></i> 首页'
     href: /
-  - title: '<i class="fab fa-readme fa-fw"></i> 关于'
+  - title: '<i class="fab fa-readme fa-fw"></i> 关于我'
     href: /about
   - title: '<i class="fas fa-comments fa-fw"></i> 留言'
     href: /comments
@@ -252,8 +252,8 @@ sidebar:
 
 index:
   showtag:
-  - 人生经验
   - 正经博文
+  - 
   - 云雀恭弥
 
 post:

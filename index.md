@@ -1,6 +1,6 @@
 ﻿---
 layout: index
-title: 我们各自努力，最高处见
+title: 万物皆有裂痕，那是光进来的地方
 ---
 ## Contact
 
@@ -16,11 +16,4 @@ title: 我们各自努力，最高处见
 
 ## Skill
 
-- **Java**, Familiar&Learning
-  - **SSM**, Familiar&Learning
-- **Python**, Familiar
-- **Markdown**, Familiar
-- **Linux**, Familiar&Learning
-- **Git**, Familiar
-- **VSCode**, Familiar
-- **Haskell**, Prior Experience
+
