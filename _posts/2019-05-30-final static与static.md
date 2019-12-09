@@ -1,3 +1,9 @@
+﻿---
+title: final static与static
+categories: 杂七杂八
+date: 2019-12-09 22:09:41
+---
+
 刚刚有个小伙伴在群里问这个问题，两个demo就相差一个final,结果为什么不一样？我一时没答出来==
 
 两个demo

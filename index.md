@@ -1,6 +1,6 @@
 ﻿---
 layout: index
-title: 奇迹の山
+title: 我们各自努力，最高处见
 ---
 ## Contact
 
@@ -16,13 +16,10 @@ title: 奇迹の山
 
 ## Skill
 
-- **C/C++**, Familiar
-  - **OpenMP**, Familiar
-  - **MPI**, Familiar&Learning
-  - **CUDA**, Learning
+- **Java**, Familiar&Learning
+  - **SSM**, Familiar&Learning
 - **Python**, Familiar
 - **Markdown**, Familiar
-- **LaTex**, Familiar
 - **Linux**, Familiar&Learning
 - **Git**, Familiar
 - **VSCode**, Familiar
