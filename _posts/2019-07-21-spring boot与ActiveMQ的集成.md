@@ -1,6 +1,5 @@
 ﻿---
 title: spring boot与ActiveMQ的集成
-categories: 微服务架构
 date: 2019-07-21 01:07:32
 tags:
   - 微服务架构

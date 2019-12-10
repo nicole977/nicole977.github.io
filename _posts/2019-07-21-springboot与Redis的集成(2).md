@@ -1,6 +1,5 @@
 ﻿---
 title: springboot与Redis的集成2
-categories: 微服务架构
 date: 2019-07-21 01:07:24
 tags:
   - 微服务架构

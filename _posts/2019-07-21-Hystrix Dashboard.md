@@ -1,6 +1,5 @@
 ﻿---
 title: Hystrix Dashboard的使用
-categories: 微服务架构
 date: 2019-07-21 01:07:45
 tags:
   - 微服务架构

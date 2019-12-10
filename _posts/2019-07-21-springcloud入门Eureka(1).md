@@ -1,6 +1,5 @@
 ﻿---
 title: springcloud入门Eureka1
-categories: 微服务架构
 date: 2019-07-21 01:07:21
 tags:
   - 微服务架构

@@ -1,6 +1,5 @@
 ﻿---
 title: Hystrix Dashboard
-categories: 微服务架构
 date: 2019-08-10 01:07:45
 tags:
   - 微服务架构

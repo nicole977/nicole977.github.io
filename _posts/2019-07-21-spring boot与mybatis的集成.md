@@ -1,6 +1,5 @@
 ﻿---
 title: spring boot与mybatis的集成
-categories: 微服务架构
 date: 2019-07-21 00:18:30
 tags:
   - 微服务架构
